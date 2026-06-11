@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.inkstonetask.mapper.TaskExecuteLogMapper">
+
+    <insert id="insert" parameterType="com.example.inkstonetask.domain.TaskExecuteLog" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO task_execute_log
+        (task_id, queue_id, execute_status, start_time, end_time, result_msg, error_stack, created_at)
+        VALUES
+        (#{taskId}, #{queueId}, #{executeStatus}, #{startTime}, #{endTime}, #{resultMsg}, #{errorStack}, #{createdAt})
+    </insert>
+
+    <update id="updateSuccess" parameterType="com.example.inkstonetask.domain.TaskExecuteLog">
+        UPDATE task_execute_log
+        SET execute_status = #{executeStatus},
+            end_time = #{endTime},
+            result_msg = #{resultMsg}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateFailed" parameterType="com.example.inkstonetask.domain.TaskExecuteLog">
+        UPDATE task_execute_log
+        SET execute_status = #{executeStatus},
+            end_time = #{endTime},
+            result_msg = #{resultMsg},
+            error_stack = #{errorStack}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

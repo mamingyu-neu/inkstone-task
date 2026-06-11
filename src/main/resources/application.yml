@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: inkstone-task
+  datasource:
+    url: jdbc:mysql://localhost:3306/inkstone_task?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
+  type-aliases-package: com.example.inkstonetask.domain
+
+logging:
+  level:
+    com.example.inkstonetask: info

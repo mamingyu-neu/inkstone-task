@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.inkstonetask.mapper.TaskDispatchQueueMapper">
+
+    <insert id="insertQueue" parameterType="com.example.inkstonetask.domain.TaskDispatchQueue" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO task_dispatch_queue
+        (task_id, queue_status, priority, next_trigger_time, worker_id, retry_count, fail_reason, created_at, updated_at)
+        VALUES
+        (#{taskId}, #{queueStatus}, #{priority}, #{nextTriggerTime}, #{workerId}, #{retryCount}, #{failReason}, NOW(), NOW())
+    </insert>
+
+    <select id="findExecutableQueueItems" resultType="com.example.inkstonetask.domain.TaskDispatchQueue">
+        SELECT *
+        FROM task_dispatch_queue
+        WHERE queue_status IN ('waiting', 'retry_wait')
+          AND next_trigger_time <= #{now}
+        ORDER BY priority DESC, id ASC
+        LIMIT #{limit}
+    </select>
+
+    <update id="claimQueueItem">
+        UPDATE task_dispatch_queue
+        SET queue_status = 'running',
+            worker_id = #{workerId},
+            updated_at = NOW()
+        WHERE id = #{queueId}
+          AND queue_status IN ('waiting', 'retry_wait')
+    </update>
+
+    <update id="markQueueSuccess">
+        UPDATE task_dispatch_queue
+        SET queue_status = 'success',
+            updated_at = NOW()
+        WHERE id = #{queueId}
+    </update>
+
+    <update id="markQueueFailed">
+        UPDATE task_dispatch_queue
+        SET queue_status = 'failed',
+            fail_reason = #{failReason},
+            updated_at = NOW()
+        WHERE id = #{queueId}
+    </update>
+
+    <update id="markQueueRetry">
+        UPDATE task_dispatch_queue
+        SET queue_status = 'retry_wait',
+            retry_count = retry_count + 1,
+            next_trigger_time = #{nextTriggerTime},
+            fail_reason = #{failReason},
+            updated_at = NOW()
+        WHERE id = #{queueId}
+    </update>
+
+</mapper>
