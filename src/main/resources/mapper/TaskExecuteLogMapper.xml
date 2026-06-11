@@ -11,6 +11,13 @@
         (#{taskId}, #{queueId}, #{executeStatus}, #{startTime}, #{endTime}, #{resultMsg}, #{errorStack}, #{createdAt})
     </insert>
 
+    <select id="findAll" resultType="com.example.inkstonetask.domain.TaskExecuteLog">
+        SELECT *
+        FROM task_execute_log
+        ORDER BY id DESC
+        LIMIT #{limit}
+    </select>
+
     <update id="updateSuccess" parameterType="com.example.inkstonetask.domain.TaskExecuteLog">
         UPDATE task_execute_log
         SET execute_status = #{executeStatus},

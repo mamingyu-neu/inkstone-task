@@ -29,7 +29,7 @@ public class TaskService {
         task.setMaxRetryCount(request.getMaxRetryCount() == null ? 3 : request.getMaxRetryCount());
         task.setRetryCount(0);
         task.setExecutorType(request.getExecutorType() == null ? "default" : request.getExecutorType());
-        task.setExecutorConfig(request.getExecutorConfig());
+        task.setExecutorConfig(request.getExecutorConfig() == null ? "{}" : request.getExecutorConfig());
         task.setCalendarFlag(request.getPlanStartTime() != null && request.getPlanEndTime() != null ? 1 : 0);
         task.setDeleted(0);
         taskMapper.insert(task);

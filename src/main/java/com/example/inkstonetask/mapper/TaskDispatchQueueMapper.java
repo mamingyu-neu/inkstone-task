@@ -11,6 +11,10 @@ import java.util.List;
 public interface TaskDispatchQueueMapper {
     int insertQueue(TaskDispatchQueue queue);
 
+    List<TaskDispatchQueue> findAll(@Param("limit") int limit);
+
+    TaskDispatchQueue findById(@Param("queueId") Long queueId);
+
     List<TaskDispatchQueue> findExecutableQueueItems(@Param("now") LocalDateTime now, @Param("limit") int limit);
 
     int claimQueueItem(@Param("queueId") Long queueId, @Param("workerId") String workerId);

@@ -10,6 +10,8 @@ import java.util.List;
 public interface TaskMapper {
     int insert(Task task);
 
+    List<Task> findAll(@Param("limit") int limit);
+
     List<Task> findReadyTasks();
 
     int markTaskQueued(@Param("taskId") Long taskId);
@@ -17,6 +19,8 @@ public interface TaskMapper {
     Task findById(@Param("taskId") Long taskId);
 
     int markTaskRunning(@Param("taskId") Long taskId);
+
+    int markTaskQueuedForRetry(@Param("taskId") Long taskId);
 
     int markTaskFinished(@Param("taskId") Long taskId);
 

@@ -5,14 +5,16 @@ spring:
   application:
     name: inkstone-task
   datasource:
-    url: jdbc:mysql://localhost:3306/inkstone_task?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
-    username: root
-    password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:postgresql://localhost:5432/inkstone_task
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
 
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
   type-aliases-package: com.example.inkstonetask.domain
+  configuration:
+    map-underscore-to-camel-case: true
 
 logging:
   level:
