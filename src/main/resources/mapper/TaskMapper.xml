@@ -12,8 +12,16 @@
         VALUES
         (#{taskName}, #{taskType}, #{content}, #{status}, #{priority}, #{planStartTime}, #{planEndTime},
          #{actualStartTime}, #{actualEndTime}, #{maxRetryCount}, #{retryCount},
-         #{executorType}, #{executorConfig}, #{calendarFlag}, #{deleted}, NOW(), NOW())
+         #{executorType}, CAST(#{executorConfig} AS JSONB), #{calendarFlag}, #{deleted}, NOW(), NOW())
     </insert>
+
+    <select id="findAll" resultType="com.example.inkstonetask.domain.Task">
+        SELECT *
+        FROM task
+        WHERE deleted = 0
+        ORDER BY id DESC
+        LIMIT #{limit}
+    </select>
 
     <select id="findReadyTasks" resultType="com.example.inkstonetask.domain.Task">
         SELECT *
@@ -21,8 +29,8 @@
         WHERE deleted = 0
           AND status = 'pending'
           AND plan_start_time IS NOT NULL
-          AND plan_start_time <= NOW()
-          AND (plan_end_time IS NULL OR plan_end_time >= NOW())
+          AND plan_start_time &lt;= NOW()
+          AND (plan_end_time IS NULL OR plan_end_time &gt;= NOW())
         ORDER BY priority DESC, plan_start_time ASC
         LIMIT 500
     </select>
@@ -46,6 +54,14 @@
             actual_start_time = NOW(),
             updated_at = NOW()
         WHERE id = #{taskId}
+    </update>
+
+    <update id="markTaskQueuedForRetry">
+        UPDATE task
+        SET status = 'queued',
+            updated_at = NOW()
+        WHERE id = #{taskId}
+          AND status = 'running'
     </update>
 
     <update id="markTaskFinished">

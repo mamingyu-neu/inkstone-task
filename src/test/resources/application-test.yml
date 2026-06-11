@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:inkstone_task_test;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema-h2.sql
+  task:
+    scheduling:
+      enabled: false
+
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
+  type-aliases-package: com.example.inkstonetask.domain
+  configuration:
+    map-underscore-to-camel-case: true

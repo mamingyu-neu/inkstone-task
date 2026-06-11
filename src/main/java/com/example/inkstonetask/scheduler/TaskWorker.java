@@ -87,6 +87,7 @@ public class TaskWorker {
         } catch (Exception e) {
             String error = stackTraceToString(e);
             if (item.getRetryCount() < task.getMaxRetryCount()) {
+                taskMapper.markTaskQueuedForRetry(task.getId());
                 queueMapper.markQueueRetry(item.getId(), LocalDateTime.now().plusMinutes(5), e.getMessage());
                 writeOperationLog(task.getId(), "retry", "system", "任务执行失败，等待重试");
             } else {

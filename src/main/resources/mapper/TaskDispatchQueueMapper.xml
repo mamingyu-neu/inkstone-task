@@ -11,11 +11,24 @@
         (#{taskId}, #{queueStatus}, #{priority}, #{nextTriggerTime}, #{workerId}, #{retryCount}, #{failReason}, NOW(), NOW())
     </insert>
 
+    <select id="findAll" resultType="com.example.inkstonetask.domain.TaskDispatchQueue">
+        SELECT *
+        FROM task_dispatch_queue
+        ORDER BY id DESC
+        LIMIT #{limit}
+    </select>
+
+    <select id="findById" resultType="com.example.inkstonetask.domain.TaskDispatchQueue">
+        SELECT *
+        FROM task_dispatch_queue
+        WHERE id = #{queueId}
+    </select>
+
     <select id="findExecutableQueueItems" resultType="com.example.inkstonetask.domain.TaskDispatchQueue">
         SELECT *
         FROM task_dispatch_queue
         WHERE queue_status IN ('waiting', 'retry_wait')
-          AND next_trigger_time <= #{now}
+          AND next_trigger_time &lt;= #{now}
         ORDER BY priority DESC, id ASC
         LIMIT #{limit}
     </select>
